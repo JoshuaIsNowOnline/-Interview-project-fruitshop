@@ -41,9 +41,9 @@ export default function App() {
   }
 
   // 加到購物車（先更新 UI 再呼叫 API）
-  async function addToCart(fruit) {
+  async function addToCart(fruit, quantity= 1) {
     // optimistic update (簡單版本)
-    const payload = { FruitId: fruit.id, Quantity: 1 };
+    const payload = { FruitId: fruit.id, quantity};
 
     try {
       await addToCartApi(payload);
@@ -51,7 +51,7 @@ export default function App() {
       await loadCart();
       const res = await fetchFruits();
       setFruits(res.data);
-      alert("已加入購物車");
+      alert(`已加入 ${quantity} 個 ${fruit.name} 到購物車`);
     } catch (err) {
       console.error("addToCart error:", err);
       alert("加入失敗");
@@ -82,7 +82,7 @@ export default function App() {
           {loadingFruits ? (
             <p>載入中...</p>
           ) : (
-            <FruitList fruits={fruits} onAddToCart={addToCart} />
+            <FruitList fruits={fruits} AddToCart={addToCart} />
           )}
         </section>
 
