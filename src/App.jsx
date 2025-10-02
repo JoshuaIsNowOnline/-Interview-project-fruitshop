@@ -10,20 +10,27 @@ import FruitList from "./components/FruitList";
 import Cart from "./components/Cart";
 import "./index.css";
 import Login from "./components/Login";
-
+import Nav from "./components/Nav";
+import User from "./components/User";
 
 export default function App() {
   const [fruits, setFruits] = useState([]);
   const [cart, setCart] = useState([]);
   const [loadingFruits, setLoadingFruits] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+  const [Username, setUsername] = useState("未登入");
+
+  const handleLoginUsername = (value) => {
+    setUsername(value);
+  };
 
   useEffect(() => {
     setIsLoggedIn(false);
     loadFruits();
     loadCart();
   }, []);
-    function handleLoginSuccess() {
+
+  async function handleLoginSuccess() {
     setIsLoggedIn(true);
     // loadFruits();
     // loadCart();
@@ -51,9 +58,9 @@ export default function App() {
   }
 
   // 加到購物車（先更新 UI 再呼叫 API）
-  async function addToCart(fruit, quantity= 1) {
+  async function addToCart(fruit, quantity = 1) {
     // optimistic update (簡單版本)
-    const payload = { FruitId: fruit.id, quantity};
+    const payload = { FruitId: fruit.id, quantity };
 
     try {
       await addToCartApi(payload);
@@ -84,25 +91,34 @@ export default function App() {
     <div className="app">
       <header>
         <h1>水果賣場</h1>
+        <Nav />
       </header>
 
-    {!isLoggedIn 
-    ? (<Login onLogin={handleLoginSuccess} />) 
-    : (<main>
-        <section>
-          <h2>商品</h2>
-          {loadingFruits ? (
-            <p>載入中...</p>
-          ) : (
-            <FruitList fruits={fruits} AddToCart={addToCart} />
-          )}
-        </section>
+      {!isLoggedIn ? (
+        <>
+          <User Username={Username} />
+          <Login
+            onLogin={handleLoginSuccess}
+            onsetUsername={handleLoginUsername}
+          />
+        </>
+      ) : (
+        <main>
+          <User Username={Username} />
+          <section>
+            <h2>商品</h2>
+            {loadingFruits ? (
+              <p>載入中...</p>
+            ) : (
+              <FruitList fruits={fruits} AddToCart={addToCart} />
+            )}
+          </section>
 
-        <aside>
-          <Cart items={cart} onRemove={removeCartItem} />
-        </aside>
-      </main>
-    )}
+          <aside>
+            <Cart items={cart} onRemove={removeCartItem} />
+          </aside>
+        </main>
+      )}
     </div>
   );
 }

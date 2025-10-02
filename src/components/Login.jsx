@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { loginApi } from "../api/api";
 
-export default function Login({ onLogin }) {
+export default function Login({ onLogin, onsetUsername }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -10,6 +10,12 @@ export default function Login({ onLogin }) {
     try {
       const res = await loginApi({ username, password });
       localStorage.setItem("token", res.data.token);
+      onsetUsername(username);
+
+      //   let temp = Username;
+      //   temp = username;
+      //   Username = temp;
+      //   onsetUsername(username);
       alert("登入成功");
       onLogin(); // 通知父層重新載入資料
     } catch (err) {
