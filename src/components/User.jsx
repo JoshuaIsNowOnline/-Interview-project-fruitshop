@@ -5,8 +5,8 @@ import { FaCircleUser } from "react-icons/fa6";
 
 export default function User({Username}){
     return(
-        <div>
-        <FaCircleUser/><br/>
+        <div className="login-state">
+        <FaCircleUser/>
         <span>{Username}</span>
         </div>
     )

@@ -10,12 +10,12 @@ body {
   padding: 20px;
   background-color: rgb(255, 166, 0);
 }
-.app header h1 {
-  margin: 0 0 20px 0;
+.aaaa{
+  display: flex;
+  flex-direction: row;
 }
-main {
-  /* display: flex; */
-  gap: 20px;
+.app header h1 {
+  margin: 5px 0 5px 5px;
 }
 .fruit-list {
   display: grid;
@@ -56,9 +56,11 @@ main {
 }
 .login-box{
   position: relative;
-  background-color: orange;
-  width: 100%;
-  height: 600px;
+  background-color: rgb(255, 255, 255);
+  width: 50%;
+  height: 300px;
+  margin-top: 20px;
+  margin-left: 50px;
 }
 .login-card{
   position:absolute;
@@ -102,9 +104,6 @@ header{
   display: flex;
   justify-content: space-between;
 }
-/* .nav{
-  
-} */
 .nav-list{
   list-style: none;
   display: flex;
@@ -116,3 +115,4 @@ header{
   border-bottom: 1px solid #ffffff;
   cursor: pointer;
 }
+

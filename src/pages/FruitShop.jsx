@@ -1,3 +1,93 @@
+import React, { useEffect, useState } from "react";
+
+import {
+  fetchFruits,
+  fetchCart,
+  addToCartApi,
+  removeCartItemApi,
+} from "../api/api";
+import FruitList from "../components/FruitList";
+import Cart from "../components/Cart";
+
 export default function FruitShop() {
-  return <h1>這是商品</h1>;
+const [cart, setCart] = useState([]);
+const [loadingFruits, setLoadingFruits] = useState(false);
+const [fruits, setFruits] = useState([]);
+
+  useEffect(() => {
+    loadFruits();
+    loadCart();
+  }, []);
+
+async function loadFruits() {
+      setLoadingFruits(true);
+      try {
+        const res = await fetchFruits();
+        setFruits(res.data);
+      } catch (err) {
+        console.error("fetchFruits error:", err);
+      } finally {
+        setLoadingFruits(false);
+      }
+    }
+
+  async function loadCart() {
+    try {
+      const res = await fetchCart();
+      setCart(res.data);
+    } catch (err) {
+      console.error("fetchCart error:", err);
+    }
+  }
+
+  // 加到購物車（先更新 UI 再呼叫 API）
+  async function addToCart(fruit, quantity = 1) {
+    // optimistic update (簡單版本)
+    const payload = { FruitId: fruit.id, quantity };
+
+    try {
+      await addToCartApi(payload);
+      // API 回傳後重新載入 cart（確保資料一致）
+      await loadCart();
+      const res = await fetchFruits();
+      setFruits(res.data);
+      alert(`已加入 ${quantity} 個 ${fruit.name} 到購物車`);
+    } catch (err) {
+      console.error("addToCart error:", err);
+      alert("加入失敗");
+    }
+  }
+
+
+async function removeCartItem(id) {
+    try {
+      await removeCartItemApi(id);
+      await loadCart();
+      const res = await fetchFruits();
+      setFruits(res.data);
+      alert("已移除該商品");
+    } catch (err) {
+      console.error("removeCartItem error:", err);
+    }
+  }
+
+
+
+
+  return (
+    <main>
+      <section>
+        <h2>商品</h2>
+        {loadingFruits ? (
+          <p>載入中...</p>
+        ) : (
+          <FruitList fruits={fruits} AddToCart={addToCart} />
+        )}
+      </section>
+
+      <aside>
+        <Cart items={cart} onRemove={removeCartItem} />
+      </aside>
+    </main>
+  );
 }
