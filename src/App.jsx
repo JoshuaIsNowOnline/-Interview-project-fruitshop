@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 // import React, {useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import FruitShop from "./pages/FruitShop";
+import TobuyList from "./pages/TobuyList";
+import Game from "./pages/Game";
+
 import {
   fetchFruits,
   fetchCart,
@@ -10,7 +15,6 @@ import FruitList from "./components/FruitList";
 import Cart from "./components/Cart";
 import "./index.css";
 import Login from "./components/Login";
-import Nav from "./components/Nav";
 import User from "./components/User";
 
 export default function App() {
@@ -91,7 +95,23 @@ export default function App() {
     <div className="app">
       <header>
         <h1>水果賣場</h1>
-        <Nav />
+
+        <Router>
+          <div className="nav">
+            <nav>
+              <ul className="nav-list">
+                  <li><Link to="/FruitShop">選購商品</Link></li>
+                  <li><Link to="/TobuyList">列清單</Link></li>
+                  <li><Link to="/Game">小遊戲</Link></li>
+              </ul>
+              <Routes>
+                <Route path="/FruitShop" element={<FruitShop />} />
+                <Route path="/TobuyList" element={<TobuyList />} />
+                <Route path="/Game" element={<Game />} />
+              </Routes>
+            </nav>
+          </div>
+        </Router>
       </header>
 
       {!isLoggedIn ? (
@@ -103,21 +123,23 @@ export default function App() {
           />
         </>
       ) : (
-        <main>
+        <>
           <User Username={Username} />
-          <section>
-            <h2>商品</h2>
-            {loadingFruits ? (
-              <p>載入中...</p>
-            ) : (
-              <FruitList fruits={fruits} AddToCart={addToCart} />
-            )}
-          </section>
+          <main>
+            <section>
+              <h2>商品</h2>
+              {loadingFruits ? (
+                <p>載入中...</p>
+              ) : (
+                <FruitList fruits={fruits} AddToCart={addToCart} />
+              )}
+            </section>
 
-          <aside>
-            <Cart items={cart} onRemove={removeCartItem} />
-          </aside>
-        </main>
+            <aside>
+              <Cart items={cart} onRemove={removeCartItem} />
+            </aside>
+          </main>
+        </>
       )}
     </div>
   );
