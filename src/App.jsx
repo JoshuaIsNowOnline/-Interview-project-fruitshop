@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+// import React, {useState } from "react";
 import {
   fetchFruits,
   fetchCart,
@@ -8,16 +9,25 @@ import {
 import FruitList from "./components/FruitList";
 import Cart from "./components/Cart";
 import "./index.css";
+import Login from "./components/Login";
+
 
 export default function App() {
   const [fruits, setFruits] = useState([]);
   const [cart, setCart] = useState([]);
   const [loadingFruits, setLoadingFruits] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
 
   useEffect(() => {
+    setIsLoggedIn(false);
     loadFruits();
     loadCart();
   }, []);
+    function handleLoginSuccess() {
+    setIsLoggedIn(true);
+    // loadFruits();
+    // loadCart();
+  }
 
   async function loadFruits() {
     setLoadingFruits(true);
@@ -76,7 +86,9 @@ export default function App() {
         <h1>水果賣場</h1>
       </header>
 
-      <main>
+    {!isLoggedIn 
+    ? (<Login onLogin={handleLoginSuccess} />) 
+    : (<main>
         <section>
           <h2>商品</h2>
           {loadingFruits ? (
@@ -90,6 +102,7 @@ export default function App() {
           <Cart items={cart} onRemove={removeCartItem} />
         </aside>
       </main>
+    )}
     </div>
   );
 }
