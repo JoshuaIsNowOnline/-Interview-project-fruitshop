@@ -9,19 +9,38 @@ export default function Tobuy({
   editBuy,
 }) {
   return tobuy.isEdited ? (
-    <Editform tobuy={tobuy} editBuy={editBuy} />
+    <div className="tobuy-item">
+      <Editform tobuy={tobuy} editBuy={editBuy} toggleIdEdited={toggleIdEdited} />
+    </div>
   ) : (
-    <div className={tobuy.isComplete ? "tobuy completed" : "tobuy"}>
-      <p onClick={() => toggleComplete(tobuy.id)}>{tobuy.content}</p>
-      <div>
-        <FiEdit2
-          onClick={() => toggleIdEdited(tobuy.id)}
-          style={{ cursor: "pointer" }}
-        />
-        <MdOutlineDelete
-          onClick={() => deleteBuy(tobuy.id)}
-          style={{ cursor: "pointer", marginLeft: "8px" }}
-        />
+    <div className={`tobuy-item ${tobuy.isComplete ? "completed" : ""}`}>
+      <div className="tobuy-content">
+        <div className="tobuy-text">
+          <div 
+            className={`tobuy-checkbox ${tobuy.isComplete ? "checked" : ""}`}
+            onClick={() => toggleComplete(tobuy.id)}
+          />
+          <span 
+            className={`tobuy-label ${tobuy.isComplete ? "completed" : ""}`}
+            onClick={() => toggleComplete(tobuy.id)}
+          >
+            {tobuy.content}
+          </span>
+        </div>
+        <div className="tobuy-actions">
+          <button 
+            className="edit-btn"
+            onClick={() => toggleIdEdited(tobuy.id)}
+          >
+            <FiEdit2 /> 編輯
+          </button>
+          <button 
+            className="delete-btn"
+            onClick={() => deleteBuy(tobuy.id)}
+          >
+            <MdOutlineDelete /> 刪除
+          </button>
+        </div>
       </div>
     </div>
   );

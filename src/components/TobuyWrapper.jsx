@@ -1,10 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Tobuy from "./Tobuy";
 import TobuyForm from "./TobuyForm";
 
 export default function TobuyWrapper() {
-  const [tobuys, setTobuys] = useState([
-  ]);
+  // 初始化時直接從 localStorage 載入數據
+  const [tobuys, setTobuys] = useState(() => {
+    const savedTobuys = localStorage.getItem('tobuys');
+    if (savedTobuys) {
+      try {
+        return JSON.parse(savedTobuys);
+      } catch (err) {
+        console.error('Error parsing saved tobuys:', err);
+        return [];
+      }
+    }
+    return [];
+  });
+
+  // 保存數據到 localStorage
+  useEffect(() => {
+    localStorage.setItem('tobuys', JSON.stringify(tobuys));
+  }, [tobuys]);
 
   const addBuy = (content) => {
     setTobuys([
@@ -59,18 +75,26 @@ export default function TobuyWrapper() {
     <div className="wrapper">
       <h1>採買清單</h1>
       <TobuyForm addBuy={addBuy} />
-      {tobuys.map((tobuy) => {
-        return (
-          <Tobuy
-            editBuy={editBuy}
-            toggleIdEdited={toggleIdEdited}
-            toggleComplete={toggleComplete}
-            tobuy={tobuy}
-            key={tobuy.id}
-            deleteBuy={deleteBuy}
-          />
-        );
-      })}
+      {tobuys.length === 0 ? (
+        <div className="empty-state">
+          <div className="empty-state-icon">📝</div>
+          <div className="empty-state-text">還沒有任何採購項目</div>
+          <div className="empty-state-subtext">開始添加您需要採購的物品吧！</div>
+        </div>
+      ) : (
+        tobuys.map((tobuy) => {
+          return (
+            <Tobuy
+              editBuy={editBuy}
+              toggleIdEdited={toggleIdEdited}
+              toggleComplete={toggleComplete}
+              tobuy={tobuy}
+              key={tobuy.id}
+              deleteBuy={deleteBuy}
+            />
+          );
+        })
+      )}
     </div>
   );
 }
