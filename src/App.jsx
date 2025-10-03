@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // import React, {useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
+import { FaHome, FaAppleAlt, FaList, FaGamepad, FaSignInAlt } from "react-icons/fa";
 import FruitShop from "./pages/FruitShop";
 import TobuyList from "./pages/TobuyList";
 import Game from "./pages/Game";
@@ -15,17 +16,26 @@ import NavigatorRoute from "./ProtectedRoute/NavigatorRoute";
 // } from "./api/api";
 
 import "./index.css";
+import "./List.css";
 import Home from "./pages/Home";
 import Logout from "./components/Logout";
 import LoginRoute from "./ProtectedRoute/LoginRoute";
 
 export default function App() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [Username, setUsername] = useState("未登入");
 
   useEffect(() => {
-    setIsLoggedIn(false);
+    // 檢查 localStorage 中是否有 token，如果有就設為已登入
+    const token = localStorage.getItem("token");
+    if (token) {
+      setIsLoggedIn(true);
+      // 可以從 localStorage 中獲取用戶名（如果有存儲的話）
+      const savedUsername = localStorage.getItem("username");
+      if (savedUsername) {
+        setUsername(savedUsername);
+      }
+    }
   }, []);
 
   return (
@@ -41,16 +51,16 @@ export default function App() {
                   {isLoggedIn ? (
                     <>
                       <li>
-                        <Link to="/Home">首頁</Link>
+                        <Link to="/Home"><FaHome /> 首頁</Link>
                       </li>
                       <li>
-                        <Link to="/FruitShop">選購商品</Link>
+                        <Link to="/FruitShop"><FaAppleAlt /> 選購商品</Link>
                       </li>
                       <li>
-                        <Link to="/TobuyList">列清單</Link>
+                        <Link to="/TobuyList"><FaList /> 列清單</Link>
                       </li>
                       <li>
-                        <Link to="/Game">小遊戲</Link>
+                        <Link to="/Game"><FaGamepad /> 小遊戲</Link>
                       </li>
                       <li>
                         <a>
@@ -68,19 +78,19 @@ export default function App() {
                   ) : (
                     <>
                       <li>
-                        <Link to="/Home">首頁</Link>
+                        <Link to="/Home"><FaHome /> 首頁</Link>
                       </li>
                       <li>
-                        <Link to="/FruitShop">選購商品</Link>
+                        <Link to="/FruitShop"><FaAppleAlt /> 選購商品</Link>
                       </li>
                       <li>
-                        <Link to="/TobuyList">列清單</Link>
+                        <Link to="/TobuyList"><FaList /> 列清單</Link>
                       </li>
                       <li>
-                        <Link to="/Game">小遊戲</Link>
+                        <Link to="/Game"><FaGamepad /> 小遊戲</Link>
                       </li>
                       <li>
-                        <Link to="/Login">登入</Link>
+                        <Link to="/Login"><FaSignInAlt /> 登入</Link>
                       </li>
                       <li>
                         <User Username={Username} />
@@ -93,13 +103,16 @@ export default function App() {
           </header>
         </div>
 
-        {isLoggedIn ? (
-          <>
+        {/* {isLoggedIn ? ( */}
             <Routes>
+              <Route 
+                path="/" 
+                element={<Navigate to="/Home" replace />} 
+              />
               <Route
                 path="/Login"
                 element={
-                  <LoginRoute>
+                  <LoginRoute isLoggedIn={isLoggedIn}>
                     <Login
                       setIsLoggedIn={setIsLoggedIn}
                       onsetUsername={setUsername}
@@ -142,10 +155,9 @@ export default function App() {
                 }
               />
             </Routes>
-          </>
-        ) : (
+        {/*) : (
           <Login setIsLoggedIn={setIsLoggedIn} onsetUsername={setUsername} />
-        )}
+        )}*/}
       </div>
     </Router>
   );

@@ -23,9 +23,13 @@ export default function Login({ setIsLoggedIn, onsetUsername,isLoggedIn}) {
       const res = await loginApi({ username, password });
       localStorage.setItem("token", res.data.token);
       
+      // 從 API 響應中獲取用戶資訊
+      const userInfo = res.data.username || res.data.user?.username || username;
+      localStorage.setItem("username", userInfo); // 保存從後端獲取的用戶名
+      
       alert("登入成功");
       setIsLoggedIn(true); // 通知父層重新載入資料
-      onsetUsername(username);
+      onsetUsername(userInfo); // 使用從後端獲取的用戶資訊
     } catch (err) {
       console.error("loginApi:", err);
       alert("登入失敗");

@@ -5,13 +5,19 @@
 }
 
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin: 0;
-  padding: 20px;
-  background-color: rgb(255, 166, 0);
+  padding: 0;
+  background: linear-gradient(135deg, #ffa726 0%, #ff9800 50%, #ff8f00 100%);
+  min-height: 100vh;
 }
-.app header h1 {
-  margin: 5px 0 5px 5px;
+
+.app {
+  min-height: 100vh;
+}
+
+.app > div:last-child {
+  padding: 0 20px 20px 20px;
 }
 .fruit-list {
   display: grid;
@@ -99,16 +105,251 @@ body {
 header{
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #ff6b35, #ff9500, #ff6b35);
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+  padding: 0 20px;
+  box-shadow: 
+    0 4px 15px rgba(255, 107, 53, 0.3),
+    0 0 30px rgba(255, 149, 0, 0.2),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+  border-radius: 0 0 15px 15px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
 }
+
+header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: headerShine 3s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes headerShine {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+header h1 {
+  color: white;
+  font-size: 2.2em;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  margin: 0 !important;
+}
+
+.nav {
+  position: relative;
+}
+
 .nav-list{
   list-style: none;
   display: flex;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
 }
+
 .nav-list li{
-  padding: 20px;
+  position: relative;
+  margin: 0;
+  padding: 0;
 }
-.nav-list li a:hover{
-  border-bottom: 1px solid #ffffff;
+
+.nav-list li a,
+.nav-list li button{
+  display: block;
+  padding: 15px 25px;
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 25px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 2px solid transparent;
   cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nav-list li a::before,
+.nav-list li button::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.nav-list li a:hover,
+.nav-list li button:hover{
+  background: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  backdrop-filter: blur(10px);
+}
+
+.nav-list li a:hover::before,
+.nav-list li button:hover::before{
+  left: 100%;
+}
+
+/* 圖標樣式 */
+.nav-list li a svg,
+.nav-list li button svg {
+  margin-right: 8px;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.nav-list li a:hover svg,
+.nav-list li button:hover svg {
+  transform: scale(1.2) rotate(5deg);
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.6));
+}
+
+/* 特定圖標的動畫效果 */
+.nav-list li a:hover svg[data-icon="home"] {
+  animation: bounce 0.6s ease-in-out;
+}
+
+.nav-list li a:hover svg[data-icon="apple-alt"] {
+  animation: shake 0.6s ease-in-out;
+}
+
+.nav-list li a:hover svg[data-icon="list"] {
+  animation: slide 0.6s ease-in-out;
+}
+
+.nav-list li a:hover svg[data-icon="gamepad"] {
+  animation: spin 0.6s ease-in-out;
+}
+
+@keyframes bounce {
+  0%, 20%, 60%, 100% { transform: scale(1.2) translateY(0); }
+  40% { transform: scale(1.2) translateY(-10px); }
+  80% { transform: scale(1.2) translateY(-5px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: scale(1.2) translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: scale(1.2) translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: scale(1.2) translateX(5px); }
+}
+
+@keyframes slide {
+  0% { transform: scale(1.2) translateX(0); }
+  50% { transform: scale(1.2) translateX(10px); }
+  100% { transform: scale(1.2) translateX(0); }
+}
+
+@keyframes spin {
+  0% { transform: scale(1.2) rotate(0deg); }
+  100% { transform: scale(1.2) rotate(360deg); }
+}
+
+.nav-list li a:active,
+.nav-list li button:active{
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* 為當前頁面添加特殊樣式 */
+.nav-list li a.active{
+  background: rgba(255,255,255,0.25);
+  border-color: rgba(255,255,255,0.5);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* 登出按鈕特殊樣式 */
+.nav-logout-btn {
+  background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+  border: 2px solid rgba(255,255,255,0.3) !important;
+  color: white;
+  font-family: inherit;
+}
+
+.nav-logout-btn:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226) !important;
+  border-color: rgba(255,255,255,0.5) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4) !important;
+}
+
+/* 用戶資訊顯示樣式 */
+.login-state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 10px 15px;
+  margin-left: 10px;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgb(255, 255, 255);
+  font-size: 14px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.login-state:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.login-state svg {
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.login-state span {
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    padding: 15px;
+    text-align: center;
+  }
+  
+  .nav-list {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  
+  .nav-list li a,
+  .nav-list li button {
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+  
+  header h1 {
+    font-size: 1.8em;
+  }
 }
 

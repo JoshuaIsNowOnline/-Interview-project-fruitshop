@@ -1,3 +1,9 @@
+import TobuyWrapper from "../components/TobuyWrapper"
+
+
+
 export default function TobuyList() {
-  return <h1>這是清單</h1>;
+  return (
+    <TobuyWrapper/>
+  );
 }

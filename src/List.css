@@ -1,0 +1,60 @@
+.wrapper{
+    background-color: rgb(207, 238, 135);
+    width: 450px;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    padding: 30px;
+}
+.list-form{
+    height: 40px;
+    width: 100%;
+    margin: 25px 0;
+    border: 1px solid orange;
+    display: flex;
+    justify-content: space-between;
+    font-family:Arial, Helvetica, sans-serif;
+}
+.edit-form{
+    height: 40px;
+    width: 100%;
+    margin: 10px 0;
+    border: 1px solid orange;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    font-family:Arial, Helvetica, sans-serif;
+}
+.list-form input, .edit-form input{
+    width: 100%;
+    height: 100%;
+    background: none;
+    border: none;
+    padding-left: 10px;
+    outline: none;
+    font-size: 16px;
+}
+.list-form button , .edit-form button{
+    border: none;
+    background-color: rgb(255, 166, 0);
+    color:rgb(255, 254, 254);
+    width: 50px;
+    height: 100%;
+    cursor: pointer;
+}
+.tobuy{
+    background-color: orange;
+    height: 40px;
+    border-radius: 5px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+.completed{
+    opacity: 0.4;
+    text-decoration: line-through 3px black;
+}
