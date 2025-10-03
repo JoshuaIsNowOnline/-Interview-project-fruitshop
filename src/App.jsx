@@ -6,7 +6,7 @@ import TobuyList from "./pages/TobuyList";
 import Game from "./pages/Game";
 import Login from "./pages/Login";
 import User from "./components/User";
-import ProtectedRoute from "./pages/ProtectedRoute";
+import NavigatorRoute from "./ProtectedRoute/NavigatorRoute";
 // import {
 //   fetchFruits,
 //   fetchCart,
@@ -16,6 +16,8 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 
 import "./index.css";
 import Home from "./pages/Home";
+import Logout from "./components/Logout";
+import LoginRoute from "./ProtectedRoute/LoginRoute";
 
 export default function App() {
   // const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -25,14 +27,6 @@ export default function App() {
   useEffect(() => {
     setIsLoggedIn(false);
   }, []);
-
-  const handleLoginUsername = (value) => {
-    setUsername(value);
-  };
-
-  async function handleLoginSuccess() {
-    setIsLoggedIn(true);
-  }
 
   return (
     <Router>
@@ -59,7 +53,13 @@ export default function App() {
                         <Link to="/Game">小遊戲</Link>
                       </li>
                       <li>
-                        <a>登出</a>
+                        <a>
+                          <Logout
+                            setIsLoggedIn={setIsLoggedIn}
+                            setUsername={setUsername}
+                            isLoggedIn={isLoggedIn}
+                          />
+                        </a>
                       </li>
                       <li>
                         <User Username={Username} />
@@ -80,7 +80,7 @@ export default function App() {
                         <Link to="/Game">小遊戲</Link>
                       </li>
                       <li>
-                        <a>登入</a>
+                        <Link to="/Login">登入</Link>
                       </li>
                       <li>
                         <User Username={Username} />
@@ -93,50 +93,58 @@ export default function App() {
           </header>
         </div>
 
-        {!isLoggedIn ? (
-          <>
-            <Login
-              onLogin={handleLoginSuccess}
-              onsetUsername={handleLoginUsername}
-            />
-          </>
-        ) : (
+        {isLoggedIn ? (
           <>
             <Routes>
               <Route
+                path="/Login"
+                element={
+                  <LoginRoute>
+                    <Login
+                      setIsLoggedIn={setIsLoggedIn}
+                      onsetUsername={setUsername}
+                      isLoggedIn={isLoggedIn}
+                    />
+                  </LoginRoute>
+                }
+              />
+
+              <Route
                 path="/Home"
                 element={
-                  <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <NavigatorRoute isLoggedIn={isLoggedIn}>
                     <Home />
-                  </ProtectedRoute>
+                  </NavigatorRoute>
                 }
               />
               <Route
                 path="/FruitShop"
                 element={
-                  <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <NavigatorRoute isLoggedIn={isLoggedIn}>
                     <FruitShop />
-                  </ProtectedRoute>
+                  </NavigatorRoute>
                 }
               />
               <Route
                 path="/TobuyList"
                 element={
-                  <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <NavigatorRoute isLoggedIn={isLoggedIn}>
                     <TobuyList />
-                  </ProtectedRoute>
+                  </NavigatorRoute>
                 }
               />
               <Route
                 path="/Game"
                 element={
-                  <ProtectedRoute isLoggedIn={isLoggedIn}>
+                  <NavigatorRoute isLoggedIn={isLoggedIn}>
                     <Game />
-                  </ProtectedRoute>
+                  </NavigatorRoute>
                 }
               />
             </Routes>
           </>
+        ) : (
+          <Login setIsLoggedIn={setIsLoggedIn} onsetUsername={setUsername} />
         )}
       </div>
     </Router>

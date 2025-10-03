@@ -1,24 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+// import React, { useState } from "react";
 import { loginApi } from "../api/api";
 import Home from "./Home";
+import { Navigate, useNavigate } from "react-router-dom";
 
-export default function Login({ onLogin, onsetUsername }) {
+export default function Login({ setIsLoggedIn, onsetUsername,isLoggedIn}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(isLoggedIn){
+      navigate("/Home",{replace:true});
+    }
+  },[isLoggedIn,navigate]);
+
+
 
   async function handleLogin(e) {
     e.preventDefault();
     try {
       const res = await loginApi({ username, password });
       localStorage.setItem("token", res.data.token);
-      onsetUsername(username);
-
-      //   let temp = Username;
-      //   temp = username;
-      //   Username = temp;
-      //   onsetUsername(username);
+      
       alert("登入成功");
-      onLogin(); // 通知父層重新載入資料
+      setIsLoggedIn(true); // 通知父層重新載入資料
+      onsetUsername(username);
     } catch (err) {
       console.error("loginApi:", err);
       alert("登入失敗");
