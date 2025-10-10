@@ -1,5 +1,6 @@
 import React from "react";
 import { MdDelete } from "react-icons/md";
+import CheckoutButton from "./CheckoutButton";
 
 export default function Cart({ items = [], onRemove }) {
   const total = items.reduce(
@@ -26,6 +27,7 @@ export default function Cart({ items = [], onRemove }) {
         </ul>
       )}
       <div className="total">總計：${total}</div>
+      <CheckoutButton cart={items} />
     </div>
   );
 }
